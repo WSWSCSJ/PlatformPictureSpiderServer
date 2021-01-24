@@ -6,6 +6,10 @@ class ByteZipInfo(ZipInfo):
 
     @classmethod
     def from_byte(cls, bytes_stream, file_full_path):
+        """
+        os.stat_result(st_mode=33188, st_ino=18409616, st_dev=16777221, st_nlink=1, st_uid=501, st_gid=20, st_size=412, st_atime=1611462518, st_mtime=1611462516, st_ctime=1611462516)
+        (33279 & 0xFFFF) << 16 中的33279是unix的文件权限,默认是777,对应的os.st_mode
+        """
         file_time = time.localtime()
         date_time = file_time[0:6]
         file_full_path = os.path.normpath(os.path.splitdrive(file_full_path)[1])
