@@ -16,9 +16,9 @@ from requests.exceptions import (
 import json
 from loguru import logger
 
-from Spider.spider.proxy import GlobalProxy
-from Spider.spider.constants import Error, SpiderRuntimeError
-from Spider.spider.ziptool import ByteZipFile, ZIP_DEFLATED
+from Spider.proxy import GlobalProxy
+from Spider.constants import Error, SpiderRuntimeError
+from Spider.ziptool import ByteZipFile, ZIP_DEFLATED
 
 
 class Spider:

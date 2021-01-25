@@ -2,7 +2,7 @@
 @Author: CXJ
 """
 import random
-from Spider.spider.mysql import MySQL
+from Spider.mysql import MySQL
 
 IP = 'your database host'
 USER = 'test'

@@ -3,8 +3,8 @@ import re
 from bs4 import BeautifulSoup
 from loguru import logger
 
-from Spider.spider.spider import PictureSpider
-from Spider.spider.constants import *
+from Spider.spider import PictureSpider
+from Spider.constants import *
 
 
 class JdSpider(PictureSpider):
