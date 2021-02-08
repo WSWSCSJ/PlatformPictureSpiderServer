@@ -15,9 +15,9 @@ JD|TM|TB 商品图片 主图|详情图|颜色图 的爬取和打包zip下载
 
 ### Requirement
 ```
-“”“
+"""
 其他版本会造成SSL unknown protocol error
 requests == 2.20.0
 python3 == 3.7.8
-”“”
+"""
 ```
