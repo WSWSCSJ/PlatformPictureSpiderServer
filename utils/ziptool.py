@@ -6,6 +6,7 @@
     继承zipfile.ZipInfo
     override ZipInfo.from_file, zip文件设置默认属性
     ZipFile.writestr 无法设置文件默认属性
+    实现runtime内存中压缩二进制
 """
 from zipfile import *
 import os

@@ -12,6 +12,9 @@
     1、获取商品页面的document, 从document清洗提取关键字段和所有类型图片的链接
     2、在同一个事件循环中阻塞得发单个和多个并发请求
 
+    单元测试用run()
+    在tornado或其他异步框架中await explicit_run()
+
     async def __run(self, **kwargs):
         对一个商品链接的处理视作一次任务
         单个任务执行中分前置请求和获取图片二进制的并发请求,两者在代码逻辑上阻塞
@@ -169,3 +172,6 @@ class JdAsyncSpider(PictureAsyncSpider):
 
     def run(self):
         asyncio.get_event_loop().run_until_complete(self.__run())
+
+    async def explicit_run(self):
+        await self.__run()
