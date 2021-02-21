@@ -6,21 +6,12 @@
 import asyncio
 import aiomysql
 
-DATABASE = {
-    "ip": 'your database ip',
-    "user": "your user name",
-    "password": "your password",
-    "port": "3306",
-    "database": "your database",
-    "table": "your table",
-    "columns": "target column",
-}
 
 class AsyncMySQL:
     ip = user = password = port \
-    = database = connection = table \
-    = columns = result = last_result \
-    = max_storage = None
+        = database = connection = table \
+        = columns = result = last_result \
+        = max_storage = None
 
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
@@ -52,21 +43,21 @@ class AsyncMySQL:
     def select(self, query, *args):
         asyncio.get_event_loop().run_until_complete(self._select(query, *args))
 
-    #TODO: override
+    # TODO: override
     async def _insert(self, query, *args):
         pass
 
     def insert(self, query, *args):
         asyncio.get_event_loop().run_until_complete(self._insert(query, *args))
 
-    #TODO: override
+    # TODO: override
     async def _update(self, query, *args):
         pass
 
     def update(self, query, *args):
         asyncio.get_event_loop().run_until_complete(self._update(query, *args))
 
-    #TODO: override
+    # TODO: override
     async def _delete(self, query, *args):
         pass
 

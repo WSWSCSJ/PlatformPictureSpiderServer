@@ -147,7 +147,7 @@ class JdAsyncSpider(PictureAsyncSpider):
             self.picture_link_request["url"] = self.url
             response = await self.request(**self.picture_link_request)
             if not response:
-                log(f"get picture link with empty response\n")
+                ERROR(f"get picture link with empty response\n")
                 raise SpiderRuntimeError(Error.EMPTY_RESPONSE)
             text = await response.text()
             soup = BeautifulSoup(text, "lxml")
