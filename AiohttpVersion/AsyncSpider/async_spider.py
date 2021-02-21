@@ -6,9 +6,9 @@
 import asyncio
 from types import MethodType
 import aiohttp
-from AsyncSpider.async_proxy import AsyncProxy, DATABASE
+from .async_proxy import AsyncProxy, DATABASE
 from traceback import format_exc
-from AsyncSpider.logger import log
+from .logger import DEBUG, ERROR, WARNING
 
 class AsyncSpider:
 
@@ -31,16 +31,16 @@ class AsyncSpider:
         :return: None or aiohttp.ClientResponse
         """
         if debug:
-            log(f"kwargs: {kwargs}")
+            DEBUG(f"kwargs: {kwargs}")
         response = None
         try:
             response = await self.session.request(**kwargs)
         except Exception as e:
-            log(f"ClientSession request error with {e}")
+            ERROR(f"ClientSession request error with {e}")
             if debug:
                 print(format_exc())
             if retry < limit:
-                log(f"retry {retry}/{limit}")
+                WARNING(f"retry {retry}/{limit}")
                 return await self.request(retry+1, limit, **kwargs)
         finally:
             return response
@@ -49,7 +49,6 @@ class AsyncSpider:
         """
         no matter kwargs contains proxy or not, set proxy equals AsyncProxy().proxy
         cause aiohttp.ClientSession only support http proxy
-        :param proxy_generator: proxy.Proxy
         :param retry: current retry times
         :param limit: max retry times
         :param debug: log out kwargs

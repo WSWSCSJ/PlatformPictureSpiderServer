@@ -4,8 +4,8 @@
 @Contact : github.com/WSWSCSJ
 """
 from io import BytesIO
-from AsyncSpider.async_task import AsyncTask
-from spider.ziptool import *
+from AiohttpVersion.AsyncSpider import AsyncTask
+from AiohttpVersion.spider.ziptool import *
 import os
 
 class PictureAsyncSpider(AsyncTask):

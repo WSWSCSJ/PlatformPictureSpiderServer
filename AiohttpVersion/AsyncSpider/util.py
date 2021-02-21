@@ -8,16 +8,19 @@ import asyncio
 from sys import stdout as out
 import threading
 import re
-from AsyncSpider.logger import log
+from .logger import INFO
+
 
 def time_counter(function):
     def wrapper(*args, **kwargs):
         start = time.time()
         result = function(*args, **kwargs)
         end = time.time()
-        log(f"{function.__name__} cost {end-start} second")
+        INFO(f"{function.__name__} cost {end - start} second")
         return result
+
     return wrapper
+
 
 def between_filter(first_str, last_str, text):
     """
@@ -27,6 +30,7 @@ def between_filter(first_str, last_str, text):
     pattern = re.compile(r'(?<={}).+?(?={})'.format(first_str, last_str))
     filter_text = ''.join(pattern.findall(text))
     return filter_text
+
 
 def retry(limit=1, duration=0, debug=False):
     """
@@ -40,8 +44,10 @@ def retry(limit=1, duration=0, debug=False):
     :return: wrapper
     """
     assert isinstance(limit, int) and limit > 0
+
     def wrapper(function):
         _limit, _debug = limit + 1, debug
+
         def inner(*args, **kwargs):
             __limit, __debug = _limit, _debug
             while __limit:
@@ -49,8 +55,8 @@ def retry(limit=1, duration=0, debug=False):
                     function(*args, **kwargs)
                 except Exception as e:
                     information = "{method} retry cause by {error}\n".format(
-                            method=function.__name__, error=e
-                        )
+                        method=function.__name__, error=e
+                    )
                     if __debug:
                         if args:
                             information += "{}\n".format(args)
@@ -61,14 +67,18 @@ def retry(limit=1, duration=0, debug=False):
                     time.sleep(duration)
                     continue
                 break
+
         return inner
+
     return wrapper
+
 
 def async_runtime_inspect(function):
     async def wrapper(*args, **kwargs):
         out.write(
             "[{datetime}] {thread}.{function} start\n".format(
-                datetime=time.strftime("%Y-%m-%d %H:%M:%S"), thread=threading.current_thread(), function=function.__name__)
+                datetime=time.strftime("%Y-%m-%d %H:%M:%S"), thread=threading.current_thread(),
+                function=function.__name__)
         )
         if args:
             out.write(f"\targs:{args}")
@@ -78,10 +88,13 @@ def async_runtime_inspect(function):
         result = await function(*args, **kwargs)
         out.write(
             "[{datetime}] {thread}.{function} finish\n".format(
-                datetime=time.strftime("%Y-%m-%d %H:%M:%S"), thread=threading.current_thread(), function=function.__name__)
+                datetime=time.strftime("%Y-%m-%d %H:%M:%S"), thread=threading.current_thread(),
+                function=function.__name__)
         )
         return result
+
     return wrapper
+
 
 def async_retry(limit=1, duration=0):
     """
@@ -94,8 +107,10 @@ def async_retry(limit=1, duration=0):
         :return: wrapper
         """
     assert isinstance(limit, int) and limit > 0
+
     def wrapper(function):
         _limit = limit + 1
+
         async def inner(*args, **kwargs):
             total = _limit - 1
             __limit = _limit
@@ -108,12 +123,15 @@ def async_retry(limit=1, duration=0):
                         "[{datetime}] {thread}.{function} retry {has}/{have} cause by {error}\n"
                         "args: {args}, kwargs: {kwargs}\n".format(
                             datetime=time.strftime("%Y-%m-%d %H:%M:%S"), thread=threading.current_thread(),
-                            function=function.__name__, error=e, args=args, kwargs=kwargs, has=total-__limit, have=total)
+                            function=function.__name__, error=e, args=args, kwargs=kwargs, has=total - __limit,
+                            have=total)
                     )
                     await asyncio.sleep(duration)
                     continue
                 else:
                     return result
             return None
+
         return inner
+
     return wrapper

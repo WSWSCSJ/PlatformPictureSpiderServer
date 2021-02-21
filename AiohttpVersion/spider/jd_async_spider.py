@@ -32,12 +32,12 @@ import asyncio
 import re
 import time
 from sys import stdout as out
-from AsyncSpider.logger import log
+from AiohttpVersion.AsyncSpider import ERROR
 
 import aiohttp
 from bs4 import BeautifulSoup
-from spider.base_async_spider import PictureAsyncSpider
-from spider.constants import *
+from AiohttpVersion.spider.base_async_spider import PictureAsyncSpider
+from AiohttpVersion.spider.constants import *
 
 class JdAsyncSpider(PictureAsyncSpider):
 
@@ -83,7 +83,6 @@ class JdAsyncSpider(PictureAsyncSpider):
         _["url"] = picture["link"]
         _["headers"]["referer"] = self.url
         response = await self.request(**_)
-        # log(f"download {picture['link']}  {response.status}")
         if response:
             picture["content"] = await response.content.read()
 
@@ -160,9 +159,8 @@ class JdAsyncSpider(PictureAsyncSpider):
             self.sku = re.findall("(\d+).html", self.url)[0]
             self.main_sku = re.findall("mainSkuId:'(\d+)',", text)[0]
             if not (self.sku and self.main_sku):
-                log(f"get sku and main sku error\n")
+                ERROR(f"get sku and main sku error\n")
                 raise SpiderRuntimeError(Error.ATTRIBUTE_ERROR)
-            # log(f"sku: {self.sku} main sku: {self.main_sku}")
             self.get_main_picture_link(soup)
             self.get_color_picture_link(soup)
             await self.get_detail_picture_link()

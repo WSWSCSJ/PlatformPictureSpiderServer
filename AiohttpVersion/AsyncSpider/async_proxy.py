@@ -3,25 +3,12 @@
 @Author  : CXJ
 @Contact : github.com/WSWSCSJ
 @Description:
-    ProxyStorage: 封装List的代理IP暂存对象
-    高并发AsyncSpider避免频繁进行数据IO
+    ProxyStorage: 封装成List的代理IP暂存对象
+    高并发AsyncSpider避免频繁进行数据库IO
 """
-from AsyncSpider.async_mysql import AsyncMySQL
-from AsyncSpider.logger import log
+from AsyncSpider import *
 
 MAX_STORAGE = 50
-
-DATABASE = {
-    "ip": 'your database ip',
-    "user": "your user name",
-    "password": "your password",
-    "port": "3306",
-    "database": "your database",
-    "table": "your table",
-    "columns": "target column",
-}
-
-SQL_STATEMENT = f"select {DATABASE['columns']} from {DATABASE['table']} limit {MAX_STORAGE}"
 
 class ProxyStorage:
 
@@ -60,7 +47,7 @@ class AsyncProxy(AsyncMySQL):
         try:
             await self._select(self.sql_statement)
         except Exception as e:
-            log(f"fill storage from select error with {e}")
+            ERROR(f"fill storage from select error with {e}")
             return False
         else:
             for _ in self.result:
